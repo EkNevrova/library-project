@@ -7,7 +7,7 @@ import ru.itgirl.libraryproject.model.Book;
 
 import java.util.Optional;
 
-public interface BookRepositary extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
+public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
 
     Optional<Book> findBookByName(String name);
 

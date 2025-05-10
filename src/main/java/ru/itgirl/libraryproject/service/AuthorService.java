@@ -3,6 +3,9 @@ package ru.itgirl.libraryproject.service;
 import ru.itgirl.libraryproject.dto.AuthorCreateDto;
 import ru.itgirl.libraryproject.dto.AuthorDto;
 import ru.itgirl.libraryproject.dto.AuthorUpdateDto;
+import ru.itgirl.libraryproject.dto.BookDto;
+
+import java.util.List;
 
 public interface AuthorService {
     AuthorDto getAuthorById(Long id);
@@ -18,4 +21,6 @@ public interface AuthorService {
     AuthorDto updateAuthor(AuthorUpdateDto authorUpdateDto);
 
     void deleteAuthor(Long id);
+
+    List<AuthorDto> getAllAuthors();
 }

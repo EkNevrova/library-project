@@ -1,4 +1,4 @@
-package ru.itgirl.libraryproject.service;
+package ru.itgirl.libraryproject.service.impl;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -12,14 +12,16 @@ import ru.itgirl.libraryproject.dto.AuthorDto;
 import ru.itgirl.libraryproject.dto.AuthorUpdateDto;
 import ru.itgirl.libraryproject.dto.BookDto;
 import ru.itgirl.libraryproject.model.Author;
+import ru.itgirl.libraryproject.model.Book;
 import ru.itgirl.libraryproject.repository.AuthorRepository;
+import ru.itgirl.libraryproject.service.AuthorService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AuthorServiceImpl implements AuthorService{
+public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
 
@@ -84,17 +86,24 @@ public class AuthorServiceImpl implements AuthorService{
         authorRepository.deleteById(id);
     }
 
+    @Override
+    public List<AuthorDto> getAllAuthors() {
+        List<Author> authors = authorRepository.findAll();
+        return authors.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
     private AuthorDto convertToDto(Author author) {
         List<BookDto> bookDtoList = null;
         if (author.getBooks() != null) {
             bookDtoList = author.getBooks().stream()
                     .map(book -> BookDto.builder()
-                            .genre(book.getGenre() != null ? book.getGenre() : null)
+                            .genre(book.getGenre() != null ? book.getGenre().getName() : null) // ← исправлено
                             .name(book.getName())
                             .id(book.getId())
                             .build())
                     .collect(Collectors.toList());
         }
+
         return AuthorDto.builder()
                 .id(author.getId())
                 .name(author.getName())
@@ -102,7 +111,4 @@ public class AuthorServiceImpl implements AuthorService{
                 .books(bookDtoList)
                 .build();
     }
-
-
-
 }

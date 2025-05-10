@@ -1,4 +1,4 @@
-package ru.itgirl.libraryproject.service;
+package ru.itgirl.libraryproject.service.impl;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -15,12 +15,14 @@ import ru.itgirl.libraryproject.model.Book;
 import ru.itgirl.libraryproject.model.Genre;
 import ru.itgirl.libraryproject.repository.BookRepository;
 import ru.itgirl.libraryproject.repository.GenreRepository;
+import ru.itgirl.libraryproject.service.BookService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class BookServiceImpl implements BookService{
+public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final GenreRepository genreRepository;
@@ -62,8 +64,11 @@ public class BookServiceImpl implements BookService{
     public BookDto updateBook(BookUpdateDto bookUpdateDto) {
         Book book = bookRepository.findById(bookUpdateDto.getId()).orElseThrow();
         book.setName(bookUpdateDto.getName());
-        Genre genre = genreRepository.findGenreByName(bookUpdateDto.getGenre().getName()).orElseThrow();
+
+        Genre genre = genreRepository.findGenreByName(bookUpdateDto.getGenre())
+                .orElseThrow(() -> new RuntimeException("Жанр не найден"));
         book.setGenre(genre);
+
         Book savedBook = bookRepository.save(book);
         return convertEntityToDto(savedBook);
     }
@@ -71,6 +76,12 @@ public class BookServiceImpl implements BookService{
     @Override
     public void deleteBook(Long id) {
         bookRepository.deleteById(id);
+    }
+
+    @Override
+    public List<BookDto> getAllBooks() {
+        List<Book> books = bookRepository.findAll();
+        return books.stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
 
     private BookDto convertEntityToDto(Book book) {
@@ -89,16 +100,19 @@ public class BookServiceImpl implements BookService{
         BookDto bookDto = BookDto.builder()
                 .id(book.getId())
                 .name(book.getName())
-                .genre(book.getGenre() != null ? book.getGenre() : null)
+                .genre(book.getGenre() != null ? book.getGenre().getName() : null)
                 .authors(authorDtoList)
                 .build();
         return bookDto;
     }
 
-    private Book convertDtoToEntity(BookCreateDto bookCreateDTO) {
+    private Book convertDtoToEntity(BookCreateDto bookCreateDto) {
+        Genre genre = genreRepository.findGenreByName(bookCreateDto.getGenre())
+                .orElseThrow(() -> new RuntimeException("Жанр не найден"));
+
         return Book.builder()
-                .name(bookCreateDTO.getName())
-                .genre(bookCreateDTO.getGenre())
+                .name(bookCreateDto.getName())
+                .genre(genre)
                 .build();
     }
 }

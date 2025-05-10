@@ -1,4 +1,4 @@
-package ru.itgirl.libraryproject.service;
+package ru.itgirl.libraryproject.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -7,15 +7,14 @@ import ru.itgirl.libraryproject.dto.BookDto;
 import ru.itgirl.libraryproject.dto.GenreDto;
 import ru.itgirl.libraryproject.model.Genre;
 import ru.itgirl.libraryproject.repository.GenreRepository;
+import ru.itgirl.libraryproject.service.GenreService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
-
 @Service
 @RequiredArgsConstructor
-public class GenreServiceImpl implements GenreService{
+public class GenreServiceImpl implements GenreService {
 
     private final GenreRepository genreRepository;
 

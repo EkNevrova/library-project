@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="db users" author="users name">
+        <sql>
+            CREATE TABLE users (
+            id SERIAL PRIMARY KEY,
+            username VARCHAR(50) NOT NULL UNIQUE,
+            password VARCHAR(255) NOT NULL,
+            roles VARCHAR(255) NOT NULL, -- Роли, например: "ROLE_USER,ROLE_ADMIN"
+            enabled BOOLEAN NOT NULL DEFAULT TRUE
+            );
+
+            INSERT INTO users (username, password, roles, enabled) VALUES
+            ('user', '$2a$10$/UpkzUUKbh0z3y3gezBJHuyc/HzCvFNjBtLTUWfPLkZOyYUtd/Ix2', 'ROLE_USER', TRUE);
+
+            INSERT INTO users (username, password, roles, enabled) VALUES
+            ('admin', '$2a$10$/UpkzUUKbh0z3y3gezBJHuyc/HzCvFNjBtLTUWfPLkZOyYUtd/Ix2', 'ROLE_USER,ROLE_ADMIN', TRUE);
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>

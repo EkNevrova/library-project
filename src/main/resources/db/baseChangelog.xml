@@ -7,5 +7,6 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
     <include file="changelog/2025_03_30.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/2025_05_17.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

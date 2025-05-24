@@ -18,13 +18,13 @@ public class RegistrationController {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public RegistrationController(AppUserRepository userRepository, PasswordEncoder   passwordEncoder) {
+    public RegistrationController(AppUserRepository userRepository, PasswordEncoder  passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     // Эндпоинт для регистрации нового пользователя
-    @PostMapping("/api/register")
+    @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody RegistrationRequest request) {
         // Проверка: существует ли уже пользователь с таким именем
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {

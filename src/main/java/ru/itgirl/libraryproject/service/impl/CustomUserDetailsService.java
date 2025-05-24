@@ -34,8 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // Формируем объект User (из Spring Security) для дальнейшей проверки
         return new User(
-
-                appUser.getUsername(), appUser.getPassword(),  appUser.isEnabled(),
+                appUser.getUsername(), appUser.getPassword(), appUser.isEnabled(),
                 true, // accountNonExpired: учетная запись не просрочена
                 true, // credentialsNonExpired: пароль не просрочен
                 true, // accountNonLocked: учетная запись не заблокирована

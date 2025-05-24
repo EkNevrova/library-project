@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.core.userdetails.*;
+import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import ru.itgirl.libraryproject.service.impl.CustomUserDetailsService;
 
@@ -18,12 +18,14 @@ import ru.itgirl.libraryproject.service.impl.CustomUserDetailsService;
 public class SecurityConfig {
 
 
-    //    // Хранение данных InMemory
-// //Частично устаревшая версия конфигурации
-//
+        // Хранение данных InMemory
+ //Частично устаревшая версия конфигурации
+
 //    @Bean
 //    SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity.authorizeHttpRequests((authorize) ->
+//        httpSecurity
+//                .csrf().disable()
+//                .authorizeHttpRequests((authorize) ->
 //                authorize.requestMatchers("/book").hasRole("USER")
 //                        .requestMatchers("/book/v2").hasRole("ADMIN")
 //                        .requestMatchers("/books").hasRole("USER")
@@ -52,15 +54,17 @@ public class SecurityConfig {
 //    }
 
 
-//   // Современная конфигурация
-//
+   // Современная конфигурация
+
 //    @Bean
 //    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http.authorizeHttpRequests(authorize -> authorize
+//        http
+//                .authorizeHttpRequests(authorize -> authorize
 //                        .requestMatchers("/book").hasRole("USER")
 //                        .requestMatchers("/book/v2").hasRole("ADMIN")
 //                        .requestMatchers("/books").hasRole("ADMIN")
-//                        .anyRequest().authenticated())
+//                        .anyRequest().authenticated()
+//                )
 //                .httpBasic(Customizer.withDefaults()); //включаем HTTP Basic Authentication
 //        return http.build();
 //    }
@@ -73,20 +77,21 @@ public class SecurityConfig {
 //
 //    //Создание пользователей в памяти с использованием безопасного кодирования паролей
 //    @Bean
-//    UserDetailsService userDetailsService() {
+//    UserDetailsService userDetailsService(PasswordEncoder encoder) {
 //        UserDetails user = User.builder()
 //                .username("user")
-//                .password(passwordEncoder().encode("password"))
+//                .password(encoder.encode("password"))
 //                .roles("USER")
 //                .build();
 //
 //        UserDetails admin = User.builder()
 //                .username("admin")
-//                .password(passwordEncoder().encode("password"))
-//                .roles("USER","ADMIN")
+//                .password(encoder.encode("password"))
+//                .roles("USER", "ADMIN")
 //                .build();
 //
 //        return new InMemoryUserDetailsManager(user, admin);
+//        }
 //    }
 
 
@@ -107,7 +112,7 @@ public class SecurityConfig {
                             .requestMatchers("/book").hasRole("USER")
                             .requestMatchers("/book/v2").hasRole("ADMIN")
                             .requestMatchers("/books").hasRole("ADMIN")
-                            .requestMatchers("/api/register", "login", "/css/", "/js/", "/img/**")
+                            .requestMatchers("/api/registration", "login", "/css/", "/js/", "/img/**")
                             .permitAll()
                             .anyRequest().authenticated()
                     )

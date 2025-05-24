@@ -1,6 +1,7 @@
 package ru.itgirl.libraryproject.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.itgirl.libraryproject.dto.AuthorDto;
 import ru.itgirl.libraryproject.dto.BookDto;
@@ -14,12 +15,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GenreServiceImpl implements GenreService {
 
     private final GenreRepository genreRepository;
 
     @Override
     public GenreDto getGenreById(Long id) {
+        log.info("Получение жанра по ID: {}", id);
         Genre genre = genreRepository.findById(id).orElseThrow();
         return convertToDto(genre);
     }
